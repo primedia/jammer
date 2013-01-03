@@ -97,4 +97,4 @@ Authors
 
 Acknowledgement
 ---------------
-Huge thanks (Primedia)[http://primedia.com] for encouraging open source contributions.
+Huge thanks [Primedia](http://primedia.com) for encouraging open source contributions.
