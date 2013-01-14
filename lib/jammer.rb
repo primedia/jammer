@@ -1,24 +1,26 @@
-require 'jammer/version' unless defined?(Jammer::VERSION)
-require 'ostruct'
-require 'optparse'
+require 'jammer/version'
+require 'jammer/package_creator'
+require 'jammer/package_info'
+require 'fileutils'
 
 module Jammer
   class << self
-    def execute(*args)
+    def create_package(package_info)
+      @creator =Jammer::PackageCreator.new
+      @creator.create_package package_info
+    end
+
+    def bump_package(version_level)
+      puts "TODO: implement version bumping"
+    end
+
+    def publish(package)
 
     end
 
-    def parse(args)
-      options = OpenStruct.new
-
-      opts = OptionParser.new do |opts|
-        opts.banner = "Usage: jammer [command] [options] [arguments]"
-
-      end
-
-      opts.parse! args
-
-      options
+    def install
+      @installer = Jammer::PackageInstaller.new
+      @installer.install_packages
     end
   end
 end

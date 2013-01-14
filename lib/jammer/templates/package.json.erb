@@ -1,0 +1,37 @@
+{
+  "name": "<%= package.name %>",
+  "version": "0.0.1",
+  "description": "<%= package.description %>",
+  "homepage": "<%= package.url %>",
+  "jam": {
+    "dependencies": {
+    },
+    "main": "<%= package.name %>.js",
+    "include": [
+    "<%= package.name %>.js",
+      "README"
+    ]
+  },
+  "maintainers": [
+    {
+    "name": "<%= user.name %>",
+    "email": "<%= user.email %>"
+    }
+  ],
+  "contributors": [
+    {
+    "name": "<%= user.name %>",
+    "email": "<%= user.email %>"
+    }
+  ],
+  "repositories": [
+    {
+        "type": "<%= package.repo_type %>",
+        "url": "<%= package.repo_url %>"
+    }
+  ]
+  <% if package.on_github? %>
+    , <%# JSON needs the comma for additional key/value pairs %>
+    "github": "<%= package.repo_url %>"
+  <% end %>
+}

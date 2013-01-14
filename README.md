@@ -1,7 +1,7 @@
 Jammer
 ======
 
-Jammer provides a Ruby-based executable for managing Jam packages, 'cause let's be honest: JS is nice, but JS wrapped up with some Ruby is at least twice as nice. Jammer provides the ability to easily create, update, and publish Jam packages with a convenient command line interface.
+Jammer provides a Ruby-based executable for managing Jam packages, 'cause let's be honest: JS is nice, but JS wrapped up with some Ruby is at least twice as nice. Jammer provides the ability to easily create, update, and publish Jam packages with a convenient command line interface. Jammer expects you to manage your source code using Git, so if you aren't, fork away and add other scm support.
 
 Dependencies
 ------------
@@ -29,7 +29,7 @@ To create a new jam package:
 
 This will prompt you for some basic information about the package (which you can always change later) and then create a new directory with the given name. Inside that directory will be the necessary structure for a basic jam package. The most important file created by this command is the `package.json` file.
 
-Running `jammer new test-lib` and providing the responses
+Running `jammer new test-lib` and providing responses for the following prompts:
 
     Package description ('The test-lib package'): This is a description for the test-lib.
     Package homepage (''): http://github.com/crymer11/test-lib
@@ -93,7 +93,7 @@ Contributing
 Authors
 -------
 
-* Colin Rymer
+* [Colin Rymer](http://github.com/crymer11)
 
 Acknowledgement
 ---------------

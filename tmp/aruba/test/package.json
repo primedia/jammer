@@ -1,0 +1,34 @@
+{
+  "name": "test",
+  "version": "0.0.1",
+  "description": "The test package.",
+  "homepage": "",
+  "jam": {
+    "dependencies": {
+    },
+    "main": "test.js",
+    "include": [
+    "test.js",
+      "README"
+    ]
+  },
+  "maintainers": [
+    {
+    "name": "Colin Rymer",
+    "email": "colin.rymer@gmail.com"
+    }
+  ],
+  "contributors": [
+    {
+    "name": "Colin Rymer",
+    "email": "colin.rymer@gmail.com"
+    }
+  ],
+  "repositories": [
+    {
+        "type": "",
+        "url": ""
+    }
+  ]
+  
+}
