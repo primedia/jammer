@@ -18,7 +18,7 @@ module Jammer
 
     end
 
-    def install
+    def install_packages
       @installer = Jammer::PackageInstaller.new
       @installer.install_packages
     end

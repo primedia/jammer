@@ -10,19 +10,25 @@ class App
   include Methadone::CLILogging
 
   main do |command, arg|
-    case command.downcase
-    when "new"
-      create_package arg
-    when "publish"
-      publish_package arg
-    when "bump"
-      bump_package arg
-    when "sammich"
+    if command
+      process_command command, arg
+    else
       install_jamfile
     end
   end
 
   class << self
+
+    def process_command(command, arg)
+      case command.downcase
+      when "new"
+        create_package arg
+      when "publish"
+        publish_package arg
+      when "bump"
+        bump_package arg
+      end
+    end
 
     def create_package(name)
       if name && valid_name(name)
@@ -46,7 +52,7 @@ class App
     end
 
     def install_jamfile
-
+      Jammer.install_packages
     end
 
     def valid_name(name)
@@ -91,7 +97,7 @@ class App
 
   on "-f", "--force", "Force package creation on specified directory."
 
-  arg :command
+  arg :command, :optional
   arg :arg, :optional
 
   version Jammer::VERSION
