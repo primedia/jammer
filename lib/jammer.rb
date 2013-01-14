@@ -1,5 +1,6 @@
 require 'jammer/version'
 require 'jammer/package_creator'
+require 'jammer/package_installer'
 require 'jammer/package_info'
 require 'fileutils'
 
