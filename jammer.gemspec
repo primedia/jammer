@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://github.com/primedia/jammer"
   gem.license       = 'MIT'
   gem.requirements  = 'Jam, the JS package manager available via NPM'
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = Dir.glob("{bin,lib,features,spec}/**/*") + %w(LICENSE README.md)
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
 
