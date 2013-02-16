@@ -1,10 +1,9 @@
 module Jammer
   class PackageInfo
+    attr_reader :name, :description, :version, :url
 
-    attr_reader :name, :description, :url
-
-    def initialize(package_name, package_desc, package_url)
-      @name, @description, @url = package_name, package_desc, package_url
+    def initialize(package_name, package_desc, package_url, package_version = nil)
+      @name, @description, @version, @url = package_name, package_desc, package_version, package_url
     end
 
     def repo_url
@@ -17,6 +16,11 @@ module Jammer
 
     def on_github?
       url.include? 'github.com'
+    end
+
+    def self.fromJSON(json_string)
+      package = JSON.parse json_string
+      new(package['name'], package['description'], nil, package['version'])
     end
   end
 end

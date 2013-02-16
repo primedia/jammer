@@ -4,6 +4,7 @@ require 'optparse'
 require 'methadone'
 require 'jammer'
 require 'ostruct'
+require 'json'
 
 class App
   include Methadone::Main
@@ -18,13 +19,17 @@ class App
   end
 
   class << self
+    VERSION_LEVELS = ['major', 'minor', 'patch']
 
     def process_command(command, arg)
       case command.downcase
       when "new"
         create_package arg
+      when "install"
+        install_jamfile
       when "publish"
-        publish_package arg
+        location = arg ? arg : '.'
+        publish_package location
       when "bump"
         bump_package arg
       end
@@ -38,13 +43,21 @@ class App
       end
     end
 
-    def publish_package(package_name)
-
+    def publish_package(package_location)
+      begin
+        if publishable_package(package_location)
+          repository = options[:repository] if options[:repository]
+          package_json_file = File.join package_location, 'package.json'
+          package_info = Jammer::PackageInfo.fromJSON(File.read(package_json_file))
+          Jammer.publish_package package_location, package_info, repository
+        end
+      rescue StandardError => e
+        exit_now! 1, e.message
+      end
     end
 
     def bump_package(version_level)
-      version_levels = ['major', 'minor', 'patch']
-      if version_levels.include? version_level
+      if VERSION_LEVELS.include? version_level
         Jammer.bump_package version_level
       else
         exit_now! 1, "A valid version level (#{version_levels.join('|')}) must be provided."
@@ -63,8 +76,8 @@ class App
       options[:force]
     end
 
-    def package_info(name, info = Jammer::PackageInfo)
-      info.new(name, package_description("The #{name} package."), package_url(''))
+    def package_info(name, info = Jammer::PackageInfo, url = '')
+      info.new(name, package_description("The #{name} package."), package_url(url))
     end
 
     def package_description(default)
@@ -82,20 +95,47 @@ class App
     end
 
     def check_directory(name)
-      if directory_exists(name)
-        exit_now! 1, "A directory named '#{name}' already exists. Use '--force' to overwrite the existing directory." 
+      if file_exists(name)
+        exit_now! 1, "A directory named '#{name}' already exists. Use '--force' to overwrite the existing directory."
       else
         true
       end
     end
 
-    def directory_exists(name)
+    def file_exists(name)
       File.exists? name
     end
 
+    def publishable_package(package_location)
+      Dir.chdir(package_location) do
+        raise(StandardError, 'You must be in a package directory to publish a package.') unless file_exists 'package.json'
+
+        package = JSON.parse(File.read('package.json'))
+
+        package['jam']['include'].each do |included|
+          raise(StandardError, "#{included} was listed to be included but could not be found") unless file_or_source_exists(included)
+        end
+
+        git = File.exists?(File.join(package_location, '.git'))
+        raise(StandardError, "Package must be a git repository to publish") unless git
+
+        branch = `git rev-parse --abbrev-ref HEAD`
+        raise(StandardError, "You must be on the master branch for the package you want to publish.") unless branch == "master"
+
+        tag = "#{package['name']}-v#{package['version']}"
+        raise(StandardError, "#{package['version']} has already been tagged. Please increment the version number.") if `git tag`.match tag
+
+        return true
+      end
+    end
+
+    def file_or_source_exists(name)
+      file_exists name.match('js') ? "./src/#{name.sub('js', '')}coffee" : name
+    end
   end
 
   on "-f", "--force", "Force package creation on specified directory."
+  on "-r", "--repository", "Use specified repository for publishing"
 
   arg :command, :optional
   arg :arg, :optional

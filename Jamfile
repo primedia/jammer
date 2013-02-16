@@ -1,0 +1,4 @@
+source :stuff
+
+jam "jquery", "~> 1.8.3"
+jam "underscore"

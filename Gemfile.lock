@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jammer (0.0.1)
+    jammer (0.8.0)
       methadone (~> 1.2.4)
 
 GEM
